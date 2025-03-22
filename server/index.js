@@ -7,6 +7,7 @@ import { dbConfig } from './utils/dbConfig.js';
 import gymRoutes from "./routes/gymRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import userRouter from "./routes/useRoutes.js";
+import discussionRouter from "./routes/discussionRoutes.js";
 
 const port = process.env.PORT || 5000;
 const app = express();
@@ -23,6 +24,7 @@ app.get('/', async (req,res)=>{
 app.use("/api/users", userRouter);
 app.use("/api/gyms", gymRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use('/discussion', discussionRouter)
 
 
 dbConfig().then(()=>{

@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const discussionSchema = new mongoose.Schema({
     title: {
         type: String,
