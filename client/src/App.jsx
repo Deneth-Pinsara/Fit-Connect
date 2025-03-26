@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import { AuthProvider } from './context/AuthContext'
 import Overview from './pages/Overview'
 import Community from './pages/Community'
+import Faq from './pages/Faq'
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Overview />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/faq" element={<Faq />} />
 
         </Routes>
       </BrowserRouter>
