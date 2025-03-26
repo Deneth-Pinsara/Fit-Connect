@@ -8,8 +8,9 @@ import gymRoutes from "./routes/gymRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import userRouter from "./routes/useRoutes.js";
 import discussionRouter from "./routes/discussionRoutes.js";
+import challengeRouter from "./routes/challengeRoutes.js";
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 const app = express();
 app.use(express.json());
 dotenv.config();
@@ -25,6 +26,8 @@ app.use("/api/users", userRouter);
 app.use("/api/gyms", gymRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use('/discussion', discussionRouter)
+app.use("/api/challenges", challengeRouter);
+
 
 
 dbConfig().then(()=>{
