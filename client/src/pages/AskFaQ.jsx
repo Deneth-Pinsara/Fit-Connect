@@ -18,12 +18,12 @@ const AskFaQ = () => {
         })
     }
 
-    const handleSubmit =async () => {
+    const handleSubmit = async () => {
         try {
             const resp = await AuthAxios.post("/discussion/create", {
-                gym:'',
+                gym: '',
                 title: faq.question,
-                description: faq.question,
+                description: 'Not answered yet',
                 name: faq.name,
                 email: faq.email,
                 mobile: faq.mobile
@@ -33,6 +33,7 @@ const AskFaQ = () => {
             navigate("/thank")
         } catch (error) {
             console.log(error);
+            alert(error?.response?.data?.message || "Something went wrong")
         }
     }
     return (
@@ -50,7 +51,7 @@ const AskFaQ = () => {
             {/* Submit cancel buttons */}
             <div className='flex items-center justify-center gap-5'>
                 <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={handleSubmit}>Submit</button>
-                <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10'>Cancel</button>
+                <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={()=>navigate("/commonfaq")}>Cancel</button>
             </div>
         </div>
     )

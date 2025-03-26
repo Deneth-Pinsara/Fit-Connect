@@ -27,7 +27,7 @@ const MyFaq = () => {
         try {
             const rep = await AuthAxios.get("/discussion/")
             console.log(rep)
-            setMyq(rep.data)
+            setMyq(rep.data?.data?.discussions)
         } catch (error) {
             console.log(error)
         }
@@ -60,7 +60,7 @@ const MyFaq = () => {
                 }
             </div>
 
-            <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10'>Back</button>
+            <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={()=>navigate("/commonfaq")}>Back</button>
 
         </div>
     )
