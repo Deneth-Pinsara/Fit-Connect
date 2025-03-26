@@ -1,6 +1,6 @@
-import { ERROR_RESPONSE } from "../utils/helper";
+import { ERROR_RESPONSE } from "../utils/helper.js";
 
-const authMiddleware = (req, res, next) => {
+export const authMiddleware = (req, res, next) => {
     const jwt  = req.headers.authorization;
     const token = jwt.split("Bearer ")[1];
     if (token) {
