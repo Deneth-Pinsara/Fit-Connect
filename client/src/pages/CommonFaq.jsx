@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TopNav from '../components/TopNav'
 import { useNavigate } from 'react-router-dom'
+import AuthAxios from '../utils/AuthAxios'
 
 const sampleQ = [
     {
@@ -19,6 +20,22 @@ const sampleQ = [
 
 const CommonFaq = () => {
     const [faqs, setFaqs] = useState(sampleQ)
+
+    const [allFaqs, setAllFaqs] = useState([])
+
+    const getAllFaqs = async () => {
+        try {
+            const rep = await AuthAxios.get("/discussion/all")
+            console.log(rep)
+            setAllFaqs(rep.data?.data?.discussions)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getAllFaqs()
+    }, [])
     const navigate = useNavigate()
     return (
         <div>
@@ -37,8 +54,22 @@ const CommonFaq = () => {
                 })
             }
 
-            <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={()=>navigate("/myfaq")}>My Questions</button>
-            <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={()=>navigate("/askfaq")}>Ask a Question</button>
+            <h2 className='text-2xl font-semibold mt-10 ml-10'>New Questions</h2>
+
+            {
+                allFaqs.map((faq, index) => {
+                    return (
+                        <div key={index} className='bg-gray-400 p-3 relative'>
+                            <h3 className='text-lg font-semibold ml-10 bg-gray-200 px-4 py-3'>Q : {faq.title}</h3>
+                            <p className='text-lg font-semibold ml-10 bg-gray-200 px-4 py-3'>A :{faq.description}</p>
+                            <button className='bg-green-200 px-4 py-3 rounded-2xl mt-10 ml-10 absolute right-10 top-5' onClick={() => navigate(`/faq/${faq._id}?answer=true`)}>Answer</button>
+                        </div>
+                    )
+                })
+            }
+
+            <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={() => navigate("/myfaq")}>My Questions</button>
+            <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={() => navigate("/askfaq")}>Ask a Question</button>
 
         </div>
     )
