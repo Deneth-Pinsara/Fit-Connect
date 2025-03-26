@@ -6,6 +6,10 @@ import { AuthProvider } from './context/AuthContext'
 import Overview from './pages/Overview'
 import Community from './pages/Community'
 import Faq from './pages/Faq'
+import CommonFaq from './pages/CommonFaq'
+import AskFaQ from './pages/AskFaQ'
+import MyFaq from './pages/MyFaq'
+import ThankYou from './pages/ThankYou'
 
 function App() {
 
@@ -18,7 +22,10 @@ function App() {
           <Route path="/dashboard" element={<Overview />} />
           <Route path="/community" element={<Community />} />
           <Route path="/faq" element={<Faq />} />
-
+          <Route path="/commonfaq" element={<CommonFaq />} />
+          <Route path="/askfaq" element={<AskFaQ />} />
+          <Route path="/myfaq" element={<MyFaq />} />
+          <Route path="/thank" element={<ThankYou />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

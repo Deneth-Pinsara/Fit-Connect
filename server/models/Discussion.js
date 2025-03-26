@@ -12,12 +12,21 @@ const discussionSchema = new mongoose.Schema({
     gym: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Gym",
-        required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
+    },
+
+    name: {
+        type: String,
+    },
+    email: {
+        type: String,
+    },
+    mobile: {
+        type: String,
     },
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
