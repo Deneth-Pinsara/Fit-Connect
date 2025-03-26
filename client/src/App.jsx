@@ -10,6 +10,7 @@ import CommonFaq from './pages/CommonFaq'
 import AskFaQ from './pages/AskFaQ'
 import MyFaq from './pages/MyFaq'
 import ThankYou from './pages/ThankYou'
+import SingleFaq from './pages/SingleFaq'
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/askfaq" element={<AskFaQ />} />
           <Route path="/myfaq" element={<MyFaq />} />
           <Route path="/thank" element={<ThankYou />} />
+          <Route path="/faq/:id" element={<SingleFaq />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
