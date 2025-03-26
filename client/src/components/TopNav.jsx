@@ -12,7 +12,7 @@ const navItems = [
     },
     {
         name: "Gyms",
-        link: "/gyms"
+        link: "/gym-list"
     },
     {
         name: "Q&A",
