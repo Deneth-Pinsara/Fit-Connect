@@ -6,13 +6,13 @@ import { ERROR_RESPONSE, SUCCESS_RESPONSE } from "../utils/helper.js";
 export const createDiscussion = async (req, res) => {
     try {
         const user = req.user;
-        const { gym, title, description } = req.body;
+        const { gym, title, description, name, email, mobile } = req.body;
 
         if (!user) return ERROR_RESPONSE(res, 401, "Unauthorized");
 
         if (!gym || !title || !description) return ERROR_RESPONSE(res, 400, "Missing required fields");
 
-        const createdDiscussion = await DiscussionModel.create({ gym, title, description, user: user, comments: [] });
+        const createdDiscussion = await DiscussionModel.create({ gym, title, description, user: user, comments: [], name, email, mobile });
 
 
         return SUCCESS_RESPONSE(res, 201, { message: "Discussion created successfully!", discussion: createdDiscussion });
@@ -81,6 +81,17 @@ export const updateDiscussion = async (req, res) => {
         const {title, description} = req.body;
         const discussion = await DiscussionModel.findByIdAndUpdate(id, {title, description}, { new: true });
         return SUCCESS_RESPONSE(res, 200, { discussion });
+    } catch (error) {
+        return ERROR_RESPONSE(res, 500, error.message);
+    }
+}
+
+export const getMyDiscussions = async (req, res) => {
+    try {
+        const { id } = req.user;
+        if(!id) return ERROR_RESPONSE(res, 400, "Missing required fields");
+        const discussions = await DiscussionModel.find({user: id}).populate("gym").populate("user").populate("comments");
+        return SUCCESS_RESPONSE(res, 200, { discussions });
     } catch (error) {
         return ERROR_RESPONSE(res, 500, error.message);
     }
