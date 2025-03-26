@@ -12,12 +12,15 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Overview />} />
           <Route path="/community" element={<Community />} />
+
         </Routes>
       </BrowserRouter>
     </AuthProvider>
+
 
   )
 }
