@@ -99,3 +99,13 @@ export const getMyDiscussions = async (req, res) => {
     }
 }
 
+
+export const getAllDiscussions= async (req, res) => {
+    try {
+        const discussions = await DiscussionModel.find().populate("gym").populate("user").populate("comments");
+        return SUCCESS_RESPONSE(res, 200, { discussions });
+    } catch (error) {
+        console.log(error)
+        return ERROR_RESPONSE(res, 500, error.message);
+    }
+}

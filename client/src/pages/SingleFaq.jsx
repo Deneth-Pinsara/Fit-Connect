@@ -6,6 +6,8 @@ import AuthAxios from '../utils/AuthAxios'
 const SingleFaq = () => {
     const navigate = useNavigate()
     const params = useParams()
+    const searchParams = new URLSearchParams(window.location.search)
+    const isAnswer = searchParams.get("answer")
     const [isEditing, setIsEditing] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const [q, setQ] = useState({
@@ -33,7 +35,7 @@ const SingleFaq = () => {
 
     const handleSave = async () => {
         try {
-            if (!isEditing) {
+            if (!isEditing && !isAnswer) {
                 setIsEditing(true)
                 return
             }
@@ -63,7 +65,7 @@ const SingleFaq = () => {
 
     useEffect(() => {
         getMyq()
-    },[refresh])
+    }, [refresh])
     return (
         <div>
             <TopNav />
@@ -74,11 +76,11 @@ const SingleFaq = () => {
                 <h5 className='text-lg font-semibold'>Submitted Questions:</h5>
                 <input disabled={!isEditing} name='title' className='text-xl bg-gray-200 p-3 font-semibold mt-10 w-full' onChange={handleCHange} value={q.title}></input>
                 <h5 className='text-lg font-semibold mt-5'>Answer:</h5>
-                <input disabled={!isEditing} name='description' className='text-lg font-semibold mt-10 bg-gray-200 p-3 w-full' onChange={handleCHange} value={q.description}></input>
+                <input disabled={isAnswer ? false : !isEditing} name='description' className='text-lg font-semibold mt-10 bg-gray-200 p-3 w-full' onChange={handleCHange} value={q.description}></input>
             </div>
 
             <div>
-                <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={handleSave}>{isEditing ? "Save" : "Edit"}</button>
+                <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={handleSave}>{(isEditing || isAnswer) ? "Save" : "Edit"}</button>
                 <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={handleDelete}>Delete</button>
             </div>
         </div>
