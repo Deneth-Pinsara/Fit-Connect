@@ -3,10 +3,16 @@ import Gym from "../models/Gym.js";
 // Create a Gym
 export const createGym = async (req, res) => {
   try {
-    const { name, location, services, pricing } = req.body;
-    const photos = req.files.map((file) => file.path);
-    console.log('Photos:', photos);
-    const gym = new Gym({ name, location, services, pricing, images: photos });
+    const { location, services, fees, phone, email } = req.body;
+    const name = req.body.gymName;
+    // Extract filenames from req.files
+    const fileNames = Object.values(req.files).flat().map(file => file.filename);
+
+    const jsonServices = JSON.parse(services);
+
+    const servicesKeys = Object.keys(jsonServices);
+
+    const gym = new Gym({ name, location, services: servicesKeys, fees, phone, email, images: fileNames.map(file => `/uploads/${file}`) });
     await gym.save();
     res.status(201).json(gym);
   } catch (error) {

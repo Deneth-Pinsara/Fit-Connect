@@ -4,7 +4,7 @@ import { upload } from "../controllers/challengeController.js";
 
 const router = express.Router();
 
-router.post("/create", upload.array("photos", 3), createGym);
+router.post("/create", upload.fields([{ name: "photo1", maxCount: 1 }, { name: "photo2", maxCount: 1 }, { name: "photo3", maxCount: 1 }]), createGym);
 router.get("/", getGyms);
 router.get("/:id", getGymById);
 router.put("/:id", updateGym);
