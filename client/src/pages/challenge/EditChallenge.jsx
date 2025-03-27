@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AuthAxios from '../../utils/AuthAxios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const CreateChallenge = () => {
+const EditChallenge = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
     const [step, setStep] = useState(1);
     const [challengeData, setChallengeData] = useState({
         gymName: '',
@@ -19,8 +20,44 @@ const CreateChallenge = () => {
             { stepNo: 1, stepName: '', stepCount: '', time: '', sets: '' }
         ],
         focus: '',
-        type: ''
+        type: '',
+        participants: [], // Explicitly an empty array
+        completedUsers: [],
+        leaderboard: []
     });
+
+
+    const [imagePreviews, setImagePreviews] = useState({
+        challengeImagePreview: '',
+        workoutStepsImagePreview: ''
+    });
+
+    // Fetch existing challenge data for editing
+    useEffect(() => {
+        if (id) {
+            AuthAxios.get(`/api/challenges/${id}`)
+                .then(response => {
+                    setChallengeData(response.data);
+                    // Set preview images if already uploaded
+                    if (response.data.challengeImage) {
+                        setImagePreviews(prevState => ({
+                            ...prevState,
+                            challengeImagePreview: response.data.challengeImage
+                        }));
+                    }
+                    if (response.data.workoutStepsImage) {
+                        setImagePreviews(prevState => ({
+                            ...prevState,
+                            workoutStepsImagePreview: response.data.workoutStepsImage
+                        }));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching challenge data:', error);
+                    alert('Error fetching challenge data');
+                });
+        }
+    }, [id]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -70,6 +107,16 @@ const CreateChallenge = () => {
             ...prevState,
             [fileType]: file
         }));
+
+        // Preview the uploaded image
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImagePreviews(prevState => ({
+                ...prevState,
+                [`${fileType}Preview`]: reader.result
+            }));
+        };
+        reader.readAsDataURL(file);
     };
 
     const nextStep = () => {
@@ -85,24 +132,41 @@ const CreateChallenge = () => {
 
         const formData = new FormData();
 
-        console.log('Full Challenge Data:', challengeData);
-
         try {
-            Object.keys(challengeData).forEach(key => {
-                if (key === 'workoutSteps') {
-                    formData.append(key, JSON.stringify(
-                        challengeData[key].filter(step =>
-                            step.stepName.trim() !== '' ||
-                            step.stepCount.trim() !== '' ||
-                            step.time.trim() !== '' ||
-                            step.sets.trim() !== ''
-                        )
-                    ));
-                } else if (key !== 'challengeImage' && key !== 'workoutStepsImage') {
-                    formData.append(key, challengeData[key]);
+            // Explicitly handle each field
+            const fieldsToAppend = [
+                'gymName', 'challengeName', 'challengeCategory', 
+                'challengeTimePeriod', 'focusBodyParts', 'fitnessBenefits', 
+                'explanation', 'focus', 'type'
+            ];
+
+            fieldsToAppend.forEach(field => {
+                if (challengeData[field]) {
+                    formData.append(field, challengeData[field]);
                 }
             });
 
+            // Explicitly handle array fields
+            const arrayFields = ['participants', 'completedUsers', 'leaderboard'];
+            arrayFields.forEach(field => {
+                // Only append if the array is not empty and contains valid entries
+                if (challengeData[field] && challengeData[field].length > 0) {
+                    formData.append(field, JSON.stringify(challengeData[field]));
+                }
+            });
+
+            // Handle workout steps
+            if (challengeData.workoutSteps && challengeData.workoutSteps.length > 0) {
+                const filteredWorkoutSteps = challengeData.workoutSteps.filter(step => 
+                    step.stepName || step.stepCount || step.time || step.sets
+                );
+                
+                if (filteredWorkoutSteps.length > 0) {
+                    formData.append('workoutSteps', JSON.stringify(filteredWorkoutSteps));
+                }
+            }
+
+            // Handle image uploads
             if (challengeData.challengeImage) {
                 formData.append('challengeImage', challengeData.challengeImage);
             }
@@ -110,48 +174,32 @@ const CreateChallenge = () => {
                 formData.append('workoutStepsImage', challengeData.workoutStepsImage);
             }
 
+            // Debug: Log all form data
             for (let [key, value] of formData.entries()) {
                 console.log(`${key}:`, value);
             }
 
-            const response = await AuthAxios.post('/api/challenges', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+            // Submission logic
+            let response;
+            if (id) {
+                response = await AuthAxios.put(`/api/challenges/${id}`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+            } else {
+                response = await AuthAxios.post('/api/challenges', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+            }
 
-            console.log('Challenge created:', response.data);
-            alert('Challenge created successfully!');
+            console.log('Challenge saved:', response.data);
+            // alert('Challenge saved successfully!');
             navigate('/success');
-            setChallengeData(
-                {
-                    gymName: '',
-                    challengeName: '',
-                    challengeCategory: '',
-                    challengeTimePeriod: '',
-                    focusBodyParts: '',
-                    fitnessBenefits: '',
-                    explanation: '',
-                    challengeImage: null,
-                    workoutStepsImage: null,
-                    workoutSteps: [
-                        { stepNo: 1, stepName: '', stepCount: '', time: '', sets: '' }
-                    ],
-                    focus: '',
-                    type: ''
-                }
-            )
-            setStep(1);
-
         } catch (error) {
-            console.error('Full Error Object:', error);
-            console.error('Error Response:', error.response?.data);
-            console.error('Error Status:', error.response?.status);
-            console.error('Error Headers:', error.response?.headers);
-
-            alert(`Error creating challenge: ${error.response?.data?.message || error.message}`);
+            console.error('Error creating/updating challenge:', error);
+            alert(`Error saving challenge: ${error.response?.data?.message || error.message}`);
         }
     };
+
 
     const renderStep1 = () => (
         <div>
@@ -234,28 +282,40 @@ const CreateChallenge = () => {
             <div className="space-y-4 w-full">
                 <div>
                     <label className="block mb-2">Challenge Image</label>
+                    {imagePreviews.challengeImagePreview && (
+                        <img
+                            src={`http://localhost:5001${imagePreviews.challengeImagePreview}`}
+                            alt="Challenge Preview"
+                            className="w-32 h-32 object-cover mb-4"
+                        />
+                    )}
                     <input
                         type="file"
                         accept="image/*"
                         onChange={(e) => handleFileChange(e, 'challengeImage')}
                         className="w-full bg-gray-200 px-4 py-3 rounded-2xl"
-                        required
                     />
                 </div>
                 <div>
                     <label className="block mb-2 mt-5">Workout Steps Image</label>
+                    {imagePreviews.workoutStepsImagePreview && (
+                        <img
+                            src={`http://localhost:5001${imagePreviews.workoutStepsImagePreview}`}
+                            alt="Workout Steps Preview"
+                            className="w-32 h-32 object-cover mb-4"
+                        />
+                    )}
                     <input
                         type="file"
                         accept="image/*"
-                        placeholder='Upload Challenge image here'
+                        placeholder="Upload Challenge image here"
                         onChange={(e) => handleFileChange(e, 'workoutStepsImage')}
                         className="w-full bg-gray-200 px-4 py-3 rounded-2xl"
-                        required
                     />
                 </div>
 
                 <div>
-                    <h3 className="text-sm font-semibold mb-4 mt-5">Step Up workout steps and task for workout chart</h3>
+                    <h3 className="text-sm font-semibold mb-4 mt-5">Workout Steps</h3>
                     {challengeData.workoutSteps.map((step, index) => (
                         <div key={index} className="w-full flex items-center space-x-3 mb-2">
                             <input
@@ -290,84 +350,55 @@ const CreateChallenge = () => {
                                 placeholder="Sets"
                                 className="flex-1 bg-gray-200 py-3 px-6 rounded-2xl w-max"
                             />
-                            {index > 0 && (
-                                <button
-                                    type="button"
-                                    onClick={() => removeWorkoutStep(index)}
-                                    className=" text-red-400 py-3 px-6 rounded"
-                                >
-                                    Remove
-                                </button>
-                            )}
+                            <button
+                                type="button"
+                                onClick={() => removeWorkoutStep(index)}
+                                className="text-red-500"
+                            >
+                                Remove Step
+                            </button>
                         </div>
                     ))}
-                    <div className='flex items-center w-full justify-center'>
-                        <button
-                            type="button"
-                            onClick={addWorkoutStep}
-                            className="bg-gray-300 text-white px-4 py-2 rounded-3xl mt-2 cursor-pointer"
-                        >
-                            + Add More
-                        </button>
-                    </div>
-                </div>
-
-
-                <div className="mb-4">
-                    <input
-                        type="text"
-                        name="focus"
-                        value={challengeData.focus}
-                        onChange={handleInputChange}
-                        placeholder="Focus (e.g., Weight Loss, Muscle Gain)"
-                        className="w-full bg-gray-200 px-4 py-3 rounded-2xl mt-5"
-                        required
-                    />
-                    <input
-                        type="text"
-                        name="type"
-                        value={challengeData.type}
-                        onChange={handleInputChange}
-                        placeholder="Challenge Type (e.g., Individual, Group)"
-                        className="w-full bg-gray-200 px-4 py-3 rounded-2xl mt-5"
-                        required
-                    />
-                </div>
-
-                <div className="flex justify-between mt-4">
                     <button
                         type="button"
-                        onClick={prevStep}
+                        onClick={addWorkoutStep}
                         className="bg-[#815B5B] text-white py-3 px-6 rounded-lg cursor-pointer"
                     >
-                        Back
-                    </button>
-                    <button
-                        type="submit"
-                        className="bg-[#615F77] text-white py-3 px-6 rounded-lg cursor-pointer"
-                        onClick={handleSubmit}
-                    >
-                        Create Challenge
+                        Add Workout Step
                     </button>
                 </div>
+                <button
+                    type="button"
+                    onClick={prevStep}
+                    className="bg-[#815B5B] text-white py-3 px-6 rounded-lg cursor-pointer mx-auto"
+                >
+                    Previous
+                </button>
             </div>
         </div>
     );
 
-
     return (
-        <div className="max-w-max mx-auto p-10 bg-white flex flex-col gap-5">
-            <div>
-                <p className='text-3xl font-bold text-center'> ADD CHALLENGE</p>
-                <div className='p-10 rounded-2xl bg-gray-500 mt-5 w-max'>
-                    <form>
-                        {step === 1 && renderStep1()}
-                        {step === 2 && renderStep2()}
-                    </form>
-                </div>
-            </div>
+        <div div className='flex flex-col items-center gap-5 py-10'>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-8 items-center">
+                <h1 className="text-2xl font-bold">Create or Edit Challenge</h1>
+                {step === 1 ? renderStep1() : renderStep2()}
+                <button
+                    type="submit"
+                    className="bg-green-500 text-white py-3 px-6 rounded-lg cursor-pointer mx-auto"
+                >
+                    Save Challenge
+                </button>
+            </form>
+
+            <button
+                onClick={() => navigate('/challenges')}
+                className="bg-red-500 text-white py-3 px-6 rounded-lg cursor-pointer mx-auto"
+            >
+                Cancel
+            </button>
         </div>
     );
 };
 
-export default CreateChallenge;
+export default EditChallenge;

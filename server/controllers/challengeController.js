@@ -1,7 +1,6 @@
 import Challenge from "../models/challengeModel.js";
 import multer from "multer";
 import fs from "fs";
-import path from "path";
 
 // Set up Multer storage
 const storage = multer.diskStorage({
@@ -22,8 +21,6 @@ export const upload = multer({ storage });
 // Create Challenge
 export const createChallenge = async (req, res) => {
     try {
-        console.log('Received Request Body:', req.body);
-        console.log('Received Files:', req.files);
 
         const { 
             gymName, 
@@ -115,7 +112,21 @@ export const updateChallenge = async (req, res) => {
         const updateData = req.body;
         if (req.files["challengeImage"]) updateData.challengeImage = `/uploads/${req.files["challengeImage"][0].filename}`;
         if (req.files["workoutStepsImage"]) updateData.workoutStepsImage = `/uploads/${req.files["workoutStepsImage"][0].filename}`;
-        if (req.body.workoutSteps) updateData.workoutSteps = JSON.parse(req.body.workoutSteps);
+        
+        // Parse array fields
+        if (req.body.workoutSteps) {
+            updateData.workoutSteps = JSON.parse(req.body.workoutSteps);
+        }
+        if (req.body.participants) {
+            updateData.participants = JSON.parse(req.body.participants);
+        }
+        if (req.body.completedUsers) {
+            updateData.completedUsers = JSON.parse(req.body.completedUsers);
+        }
+        if (req.body.leaderboard) {
+            updateData.leaderboard = JSON.parse(req.body.leaderboard);
+        }
+
 
         const challenge = await Challenge.findByIdAndUpdate(req.params.id, updateData, { new: true });
         res.status(200).json(challenge);

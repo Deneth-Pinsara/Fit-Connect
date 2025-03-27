@@ -2,7 +2,7 @@ import axios from "axios";
 
 const AuthAxios = axios.create();
 
-AuthAxios.defaults.baseURL = "http://localhost:5000";
+AuthAxios.defaults.baseURL = "http://localhost:5001";
 
 AuthAxios.interceptors.request.use((config) => {
     const token = localStorage.getItem("auth_token");

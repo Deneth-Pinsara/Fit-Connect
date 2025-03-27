@@ -23,14 +23,14 @@ app.get('/', async (req,res)=>{
     res.status(200).json('Server is up and running');
 })
 
+app.use("/uploads", express.static("uploads"));
+
 //routes
 app.use("/api/users", userRouter);
 app.use("/api/gyms", gymRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use('/discussion', discussionRouter)
 app.use("/api/challenges", challengeRouter);
-
-
 
 dbConfig().then(()=>{
     app.listen(port,()=>{

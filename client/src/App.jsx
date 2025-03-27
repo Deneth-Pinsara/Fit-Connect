@@ -16,6 +16,9 @@ import GymAddNew from './pages/Gym-Add-New'
 import GymView from './pages/Gym-View'
 import GymUpdate from './pages/Gym-Update'
 import CreateChallenge from './pages/challenge/CreateChallenge'
+import Success from './pages/challenge/Success'
+import Challenges from './pages/Challenges'
+import EditChallenge from './pages/challenge/EditChallenge'
 
 function App() {
 
@@ -40,7 +43,11 @@ function App() {
           <Route path="/gym-view/:id" element={<GymView />} />
           <Route path="/gym-update/:id" element={<GymUpdate />} />
 
+
           <Route path="/create-challenge" element={<CreateChallenge />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/challenges" element={<Challenges />} />
+          <Route path="/edit-challenge/:id" element={<EditChallenge />} />
 
         </Routes>
       </BrowserRouter>
