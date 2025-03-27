@@ -15,6 +15,8 @@ const AddReview = () => {
   const [showReviews, setShowReviews] = useState(false); // New state for showing reviews
   const [reviews, setReviews] = useState([]); // Store reviews for the selected gym
   const [viewReviewsDialog, setViewReviewsDialog] = useState(false); // State to control view reviews dialog
+  const [isUpdating, setIsUpdating] = useState(false); // New state to check if we're updating a review
+  const [reviewToUpdate, setReviewToUpdate] = useState(null); // Store the review to be updated
   const navigate = useNavigate(); // Initialize navigate
 
   useEffect(() => {
@@ -48,19 +50,53 @@ const AddReview = () => {
     }
 
     try {
-      await AuthAxios.post("/api/reviews/create", {
-        user: userName,
-        rating,
-        comment,
-        gymId: selectedGymId, // Use the selected gym ID
-      });
-      alert("Review added successfully!");
+      if (isUpdating && reviewToUpdate) {
+        // Update review
+        await AuthAxios.put(`/api/reviews/${reviewToUpdate._id}`, {
+          rating,
+          comment,
+        });
+        alert("Review updated successfully!");
+      } else {
+        // Create new review
+        await AuthAxios.post("/api/reviews/create", {
+          user: userName,
+          rating,
+          comment,
+          gymId: selectedGymId, // Use the selected gym ID
+        });
+        alert("Review added successfully!");
+      }
+
       setShowDialog(false);
-      fetchReviews(selectedGymId); // Refresh reviews after submitting
+      fetchReviews(selectedGymId); // Refresh reviews after submitting or updating
+      setIsUpdating(false); // Reset the update state
+      setReviewToUpdate(null); // Reset review to update
     } catch (error) {
-      console.error("Error adding review:", error);
-      alert("Failed to add review");
+      console.error("Error adding/updating review:", error);
+      alert("Failed to add/update review");
     }
+  };
+
+  const handleDelete = async (reviewId) => {
+    try {
+      await AuthAxios.delete(`/api/reviews/${reviewId}`);
+      alert("Review deleted successfully!");
+      fetchReviews(selectedGymId); // Refresh reviews after deleting
+      navigate('/review-add'); // Redirect to /review-add page after deletion
+    } catch (error) {
+      console.error("Error deleting review:", error);
+      alert("Failed to delete review");
+    }
+  };
+
+  const handleUpdate = (review) => {
+    setIsUpdating(true); // Set update mode
+    setReviewToUpdate(review); // Set the review to be updated
+    setUserName(review.user);
+    setRating(review.rating);
+    setComment(review.comment);
+    setShowDialog(true); // Show the review form for updating
   };
 
   const renderStars = (currentRating) => {
@@ -129,7 +165,9 @@ const AddReview = () => {
                 {showDialog && selectedGymId === gym._id && (
                   <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                      <h3 className="text-xl font-bold mb-4">Write Your Review</h3>
+                      <h3 className="text-xl font-bold mb-4">
+                        {isUpdating ? "Update Your Review" : "Write Your Review"}
+                      </h3>
                       <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                           <label htmlFor="userName" className="block text-sm font-medium">
@@ -174,7 +212,7 @@ const AddReview = () => {
                             type="submit"
                             className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
                           >
-                            Submit Review
+                            {isUpdating ? "Update Review" : "Submit Review"}
                           </button>
                         </div>
                       </form>
@@ -205,6 +243,20 @@ const AddReview = () => {
                           <div className="flex space-x-1">{renderStars(review.rating)}</div>
                         </div>
                         <p className="mt-2">{review.comment}</p>
+                        <div className="flex justify-between mt-2">
+                          <button
+                            onClick={() => handleDelete(review._id)} // Add delete functionality
+                            className="text-red-500 hover:text-red-600"
+                          >
+                            Delete
+                          </button>
+                          <button
+                            onClick={() => handleUpdate(review)} // Add update functionality
+                            className="text-blue-500 hover:text-blue-600"
+                          >
+                            Update
+                          </button>
+                        </div>
                       </div>
                     ))
                   ) : (
