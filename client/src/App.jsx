@@ -26,6 +26,7 @@ import Challenges from './pages/Challenges'
 import EditChallenges from './pages/challenge/EditChallenges'
 import ViewChallenge from './pages/challenge/ViewChallenge'
 import SuccessPage from './pages/common/SuccessPage'
+import AddReview from './pages/AddReview'
 
 
 
@@ -51,6 +52,8 @@ function App() {
           <Route path="/gym-add-new" element={<GymAddNew />} />
           <Route path="/gym-view/:id" element={<GymView />} />
           <Route path="/gym-update/:id" element={<GymUpdate />} />
+          
+          <Route path="/review-add" element={<AddReview />} />
 
 
           <Route path="/create-challenge" element={<CreateChallenge />} />

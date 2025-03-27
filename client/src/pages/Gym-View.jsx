@@ -37,6 +37,19 @@ const GymView = () => {
   return (
     <>
       <TopNav />
+      <div className='flex flex-row w-full h-screen'>
+      {/* Left Sidebar (Fixed) */}
+      <div className='flex flex-col w-1/5 h-full'>
+                <div className='w-full bg-gray-300 p-10'>
+                    <p className='text-3xl font-bold'>Gym List</p>
+                </div>
+                <div className='w-full bg-gray-400 p-10 space-y-4 flex-1'>
+                    <p className='text-2xl font-bold p-4 bg-gray-200 hover:bg-gray-300 cursor-pointer'
+                    onClick={() => navigate('/gym-list')}>Gym List</p>
+                    <p className='text-2xl font-bold p-4 bg-gray-200 hover:bg-gray-300 cursor-pointer'
+                    onClick={() => navigate('/review-add')}>Reviews</p>
+                </div>
+            </div>
       <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
         <button
           className="flex items-center text-gray-700 hover:text-gray-900 mb-4"
@@ -80,6 +93,7 @@ const GymView = () => {
             </ul>
           </div>
         )}
+      </div>
       </div>
     </>
   );

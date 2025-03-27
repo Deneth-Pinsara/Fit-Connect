@@ -66,7 +66,8 @@ const GymList = () => {
                 <div className='w-full bg-gray-400 p-10 space-y-4 flex-1'>
                     <p className='text-2xl font-bold p-4 bg-gray-200 hover:bg-gray-300 cursor-pointer'
                     onClick={() => navigate('/gym-list')}>Gym List</p>
-                    <p className='text-2xl font-bold p-4 bg-gray-200 hover:bg-gray-300 cursor-pointer'>Reviews</p>
+                    <p className='text-2xl font-bold p-4 bg-gray-200 hover:bg-gray-300 cursor-pointer'
+                    onClick={() => navigate('/review-add')}>Reviews</p>
                 </div>
             </div>
       <div className="container mx-auto p-4">

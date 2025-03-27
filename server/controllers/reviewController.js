@@ -20,6 +20,23 @@ export const addReview = async (req, res) => {
   }
 };
 
+// Fetch Reviews by Gym ID
+export const getReviewsByGymId = async (req, res) => {
+  try {
+    const { gymId } = req.params; // Get gymId from request parameters
+    const reviews = await Review.find({ gym: gymId }).populate('gym', 'name'); // Populate gym name in the reviews
+
+    if (!reviews || reviews.length === 0) {
+      return res.status(404).json({ message: "No reviews found for this gym" });
+    }
+
+    res.status(200).json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 // Delete Review
 export const deleteReview = async (req, res) => {
   try {
