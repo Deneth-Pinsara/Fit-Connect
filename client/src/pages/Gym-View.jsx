@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 import { FaArrowLeft } from 'react-icons/fa';
 import TopNav from '../components/TopNav';
 import AuthAxios, { BASE_URL } from '../utils/AuthAxios';

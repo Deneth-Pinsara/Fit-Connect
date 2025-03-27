@@ -25,6 +25,7 @@ import 'react-simple-toasts/dist/theme/dark.css';
 import Challenges from './pages/Challenges'
 import EditChallenges from './pages/challenge/EditChallenges'
 import ViewChallenge from './pages/challenge/ViewChallenge'
+import SuccessPage from './pages/common/SuccessPage'
 
 
 
@@ -59,6 +60,9 @@ function App() {
           <Route path="/do-challenge/:id" element={<ViewChallenge />} />
           <Route path="/edit-challenge/:id" element={<EditChallenge />} />
           <Route path="/delete-challenge/:id" element={<DeleteChallenge />} />
+
+
+          <Route path="/success-page" element={<SuccessPage />} />
 
         </Routes>
       </BrowserRouter>
