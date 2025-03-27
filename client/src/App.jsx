@@ -19,6 +19,7 @@ import CreateChallenge from './pages/challenge/CreateChallenge'
 import Success from './pages/challenge/Success'
 import Challenges from './pages/Challenges'
 import EditChallenge from './pages/challenge/EditChallenge'
+import DeleteChallenge from './pages/challenge/Delete'
 
 function App() {
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/success" element={<Success />} />
           <Route path="/challenges" element={<Challenges />} />
           <Route path="/edit-challenge/:id" element={<EditChallenge />} />
+          <Route path="/delete-challenge/:id" element={<DeleteChallenge />} />
 
         </Routes>
       </BrowserRouter>

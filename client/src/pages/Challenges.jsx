@@ -11,24 +11,14 @@ export default function Challenges() {
     const handleEditClick = (challengeId) => {
       navigate(`/edit-challenge/${challengeId}`);
     };
-
+  
     const handleDeleteClick = (challengeId) => {
-        // Confirm deletion
-        const confirmed = window.confirm("Are you sure you want to delete this challenge?");
-        if (confirmed) {
-            // Make DELETE request to API
-            AuthAxios.delete(`/api/challenges/${challengeId}`)
-                .then(() => {
-                    // Remove the deleted challenge from the local state
-                    setChallenges(challenges.filter(challenge => challenge._id !== challengeId));
-                    setFilteredChallenges(filteredChallenges.filter(challenge => challenge._id !== challengeId));
-                })
-                .catch(error => {
-                    console.error("Error deleting challenge:", error);
-                    alert("Failed to delete challenge.");
-                });
-        }
+      navigate(`/delete-challenge/${challengeId}`);
     };
+
+    const handleNavigate = (route) => {
+        navigate(route);
+      };
   
 
     useEffect(() => {
@@ -59,7 +49,8 @@ export default function Challenges() {
                 </div>
                 <div className='w-full bg-gray-500 p-10 space-y-4 flex-1'>
                     <p className='text-2xl font-bold p-4 bg-white'>Gym List</p>
-                    <p className='text-2xl font-bold p-4 bg-white'>Challenge Category</p>
+                    <p className='text-2xl font-bold p-4 bg-white cursor-pointer'
+                    onClick={handleNavigate('/challenges')} >Challenge Category</p>
                     <p className='text-2xl font-bold p-4 bg-white'>Reviews</p>
                 </div>
             </div>
@@ -100,14 +91,14 @@ export default function Challenges() {
                                     type="button"
                                     className="bg-green-500 text-white py-3 px-6 rounded-lg cursor-pointer"
                                     onClick={() => handleEditClick(challenge._id)}
-
-                                >
+                                    
+                                    >
                                     Edit
                                 </button>
                                 <button
                                     type="button"
                                     className="bg-red-500 text-white py-3 px-6 rounded-lg cursor-pointer"
-                                    onClick={() => handleDeleteClick(challenge._id)}  // Delete functionality
+                                    onClick={() => handleDeleteClick(challenge._id)}
                                 >
                                     Delete
                                 </button>
