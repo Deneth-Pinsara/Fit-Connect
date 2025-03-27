@@ -15,6 +15,7 @@ import GymList from './pages/Gym-List'
 import GymAddNew from './pages/Gym-Add-New'
 import GymView from './pages/Gym-View'
 import GymUpdate from './pages/Gym-Update'
+import CreateChallenge from './pages/challenge/CreateChallenge'
 
 function App() {
 
@@ -38,6 +39,9 @@ function App() {
           <Route path="/gym-add-new" element={<GymAddNew />} />
           <Route path="/gym-view/:id" element={<GymView />} />
           <Route path="/gym-update/:id" element={<GymUpdate />} />
+
+          <Route path="/create-challenge" element={<CreateChallenge />} />
+
         </Routes>
       </BrowserRouter>
     </AuthProvider>

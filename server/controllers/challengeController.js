@@ -1,7 +1,7 @@
 import Challenge from "../models/challengeModel.js";
 import multer from "multer";
-import path from "path";
 import fs from "fs";
+import path from "path";
 
 // Set up Multer storage
 const storage = multer.diskStorage({
@@ -22,12 +22,37 @@ export const upload = multer({ storage });
 // Create Challenge
 export const createChallenge = async (req, res) => {
     try {
-        const { gymName, challengeName, challengeCategory, challengeTimePeriod, focusBodyParts, fitnessBenefits, explanation, workoutSteps, focus, type } = req.body;
+        console.log('Received Request Body:', req.body);
+        console.log('Received Files:', req.files);
 
+        const { 
+            gymName, 
+            challengeName, 
+            challengeCategory, 
+            challengeTimePeriod, 
+            focusBodyParts, 
+            fitnessBenefits, 
+            explanation, 
+            workoutSteps: workoutStepsString, 
+            focus, 
+            type 
+        } = req.body;
+
+        // Parse workout steps
+        let workoutSteps;
+        try {
+            workoutSteps = JSON.parse(workoutStepsString || '[]');
+        } catch (parseError) {
+            console.error('Error parsing workout steps:', parseError);
+            return res.status(400).json({ message: "Invalid workout steps format" });
+        }
+
+        // Validate required files
         if (!req.files || !req.files["challengeImage"] || !req.files["workoutStepsImage"]) {
             return res.status(400).json({ message: "Challenge and Workout Steps images are required." });
         }
 
+        // Create new challenge
         const newChallenge = new Challenge({
             gymName,
             challengeName,
@@ -38,15 +63,28 @@ export const createChallenge = async (req, res) => {
             explanation,
             challengeImage: `/uploads/${req.files["challengeImage"][0].filename}`,
             workoutStepsImage: `/uploads/${req.files["workoutStepsImage"][0].filename}`,
-            workoutSteps: JSON.parse(workoutSteps),
+            workoutSteps: workoutSteps.map((step, index) => ({
+                stepNo: index + 1,
+                stepName: step.stepName || '',
+                stepCount: step.stepCount || 0,
+                time: step.time || '',
+                sets: step.sets || 0
+            })),
             focus,
             type
         });
 
+        // Save challenge
         await newChallenge.save();
+
         res.status(201).json(newChallenge);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Full Error in Challenge Creation:', error);
+        res.status(500).json({ 
+            message: "Internal Server Error", 
+            error: error.message,
+            stack: error.stack 
+        });
     }
 };
 

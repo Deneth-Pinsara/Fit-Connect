@@ -15,6 +15,8 @@ const app = express();
 app.use(express.json());
 dotenv.config();
 
+app.use(express.json({ limit: '50mb' })); 
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(morgan('dev'));
 app.use(cors());
 app.get('/', async (req,res)=>{
