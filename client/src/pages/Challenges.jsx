@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AuthAxios from '../utils/AuthAxios';
 import { useNavigate } from 'react-router-dom';
+import TopNav from '../components/TopNav';
 
 export default function Challenges() {
     const [challenges, setChallenges] = useState([]);
@@ -41,6 +42,8 @@ export default function Challenges() {
     }, [searchQuery, challenges]);
 
     return (
+        <>
+        <TopNav/>
         <div className='flex flex-row w-full h-screen'>
             {/* Left Sidebar (Fixed) */}
             <div className='flex flex-col w-1/5 h-full'>
@@ -108,5 +111,6 @@ export default function Challenges() {
                 </div>
             </div>
         </div>
+        </>
     );
 }

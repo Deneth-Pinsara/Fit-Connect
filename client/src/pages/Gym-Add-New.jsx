@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from "react";
 import toast from 'react-simple-toasts';
 import AuthAxios from '../utils/AuthAxios';
+import TopNav from '../components/TopNav';
 
 export default function GymAddNew() {
   const [formData, setFormData] = useState({
@@ -77,6 +78,8 @@ export default function GymAddNew() {
   };
 
   return (
+    <>
+    <TopNav/>
     <div className="max-w-lg mx-auto bg-amber-50 p-6 rounded-xl shadow-md">
       <h2 className="text-xl font-semibold mb-4">GYM Details</h2>
       <div className="space-y-3 flex flex-col">
@@ -114,5 +117,6 @@ export default function GymAddNew() {
         <button onClick={handleSubmit} className='bg-gray-500 p-2 text-white'>Save</button>
       </div>
     </div>
+    </>
   );
 }
