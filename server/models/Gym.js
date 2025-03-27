@@ -7,6 +7,7 @@ const gymSchema = mongoose.Schema(
     services: { type: [String], required: true },
     pricing: { type: Number, required: true },
     ratings: { type: Number, default: 0 },
+    images: { type: [String] },
     reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   },
   { timestamps: true }
