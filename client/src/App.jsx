@@ -20,9 +20,14 @@ import Success from './pages/challenge/Success'
 import Challenges from './pages/Challenges'
 import EditChallenge from './pages/challenge/EditChallenge'
 import DeleteChallenge from './pages/challenge/Delete'
+import { toastConfig } from 'react-simple-toasts';
+import 'react-simple-toasts/dist/style.css';
+import 'react-simple-toasts/dist/theme/dark.css';
+
+
 
 function App() {
-
+  toastConfig({ theme: 'dark' });
   return (
     <AuthProvider>
       <BrowserRouter>
