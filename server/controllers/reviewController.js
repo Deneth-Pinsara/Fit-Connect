@@ -51,3 +51,38 @@ export const deleteReview = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Update Review
+export const updateReview = async (req, res) => {
+  try {
+    const { rating, comment } = req.body;
+    const { id } = req.params;
+
+    // Find the review by ID
+    const review = await Review.findById(id);
+    if (!review) return res.status(404).json({ message: "Review not found" });
+
+    // Update the review
+    review.rating = rating || review.rating;
+    review.comment = comment || review.comment;
+
+    // Save the updated review
+    await review.save();
+
+    // Update Gym Rating (Recalculate the average rating)
+    const gym = await Gym.findById(review.gym);
+    const updatedRating = gym.reviews.length > 1
+      ? gym.reviews.reduce((acc, reviewId) => {
+          const review = gym.reviews.find((r) => r._id.toString() === reviewId.toString());
+          return acc + review.rating;
+        }, 0) / gym.reviews.length
+      : rating;
+
+    gym.ratings = updatedRating;
+    await gym.save();
+
+    res.status(200).json(review);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
