@@ -4,7 +4,9 @@ import Gym from "../models/Gym.js";
 export const createGym = async (req, res) => {
   try {
     const { name, location, services, pricing } = req.body;
-    const gym = new Gym({ name, location, services, pricing });
+    const photos = req.files.map((file) => file.path);
+    console.log('Photos:', photos);
+    const gym = new Gym({ name, location, services, pricing, images: photos });
     await gym.save();
     res.status(201).json(gym);
   } catch (error) {

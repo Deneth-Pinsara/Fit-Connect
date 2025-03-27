@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaEye, FaPen, FaTrash } from 'react-icons/fa';
 import TopNav from '../components/TopNav';
+import AuthAxios from '../utils/AuthAxios';
 
 const GymList = () => {
   const [gyms, setGyms] = useState([]);
@@ -11,7 +12,7 @@ const GymList = () => {
   useEffect(() => {
     const fetchGyms = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/gyms');
+        const response = await AuthAxios.get('/api/gyms');
         setGyms(response.data);
       } catch (error) {
         console.error('Error fetching gyms:', error);
@@ -33,7 +34,7 @@ const GymList = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this gym?")) {
       try {
-        await axios.delete(`http://localhost:5000/api/gyms/${id}`);
+        await AuthAxios.delete(`/api/gyms/${id}`);
         setGyms(gyms.filter(gym => gym._id !== id));
       } catch (error) {
         console.error("Error deleting gym:", error);
