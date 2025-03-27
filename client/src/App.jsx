@@ -17,12 +17,14 @@ import GymView from './pages/Gym-View'
 import GymUpdate from './pages/Gym-Update'
 import CreateChallenge from './pages/challenge/CreateChallenge'
 import Success from './pages/challenge/Success'
-import Challenges from './pages/Challenges'
 import EditChallenge from './pages/challenge/EditChallenge'
 import DeleteChallenge from './pages/challenge/Delete'
 import { toastConfig } from 'react-simple-toasts';
 import 'react-simple-toasts/dist/style.css';
 import 'react-simple-toasts/dist/theme/dark.css';
+import Challenges from './pages/Challenges'
+import EditChallenges from './pages/challenge/EditChallenges'
+import ViewChallenge from './pages/challenge/ViewChallenge'
 
 
 
@@ -52,7 +54,9 @@ function App() {
 
           <Route path="/create-challenge" element={<CreateChallenge />} />
           <Route path="/success" element={<Success />} />
+          <Route path="/edit-challenges" element={<EditChallenges />} />
           <Route path="/challenges" element={<Challenges />} />
+          <Route path="/do-challenge/:id" element={<ViewChallenge />} />
           <Route path="/edit-challenge/:id" element={<EditChallenge />} />
           <Route path="/delete-challenge/:id" element={<DeleteChallenge />} />
 

@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import AuthAxios from '../utils/AuthAxios';
 import { useNavigate } from 'react-router-dom';
-import TopNav from '../components/TopNav';
+import AuthAxios from '../../utils/AuthAxios';
+import TopNav from '../../components/TopNav';
 
-export default function Challenges() {
+export default function EditChallenges() {
     const [challenges, setChallenges] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredChallenges, setFilteredChallenges] = useState([]);
     const navigate = useNavigate();
   
-    const handleChallengeClick = (challengeId) => {
-      navigate(`/do-challenge/${challengeId}`);
+    const handleEditClick = (challengeId) => {
+      // Immediately navigate to edit page
+      navigate(`/edit-challenge/${challengeId}`);
+    };
+  
+    const handleDeleteClick = (challengeId) => {
+      // Immediately navigate to delete page
+      navigate(`/delete-challenge/${challengeId}`);
+    };
+
+    const handleNavigate = (route) => {
+      // Use arrow function to ensure immediate navigation
+      () => navigate(route);
     };
 
     useEffect(() => {
@@ -21,6 +32,7 @@ export default function Challenges() {
                 setFilteredChallenges(response.data);
             } catch (error) {
                 console.error("Error fetching challenges:", error);
+                // Optional: Add error handling toast or notification
             }
         };
 
@@ -37,7 +49,7 @@ export default function Challenges() {
 
     return (
         <>
-        <TopNav/>
+        <TopNav />
         <div className='flex flex-row w-full h-screen'>
             {/* Left Sidebar (Fixed) */}
             <div className='flex flex-col w-1/5 h-full'>
@@ -73,7 +85,7 @@ export default function Challenges() {
             <div className='flex flex-col w-full h-full overflow-hidden'>
                 {/* Top Header */}
                 <div className='flex justify-between items-center w-full border-b border-gray-300 p-5 bg-white'>
-                    <p className='text-2xl font-bold'>ALL CHALLENGE</p>
+                    <p className='text-2xl font-bold'>YOUR CHALLENGE</p>
                     <input
                         type='text'
                         className='bg-gray-300 p-4 rounded-md'
@@ -88,8 +100,7 @@ export default function Challenges() {
                     {filteredChallenges.map((challenge, index) => (
                         <div
                             key={index}
-                            onClick={() => handleChallengeClick(challenge._id)}
-                            className='relative w-[520px] cursor-pointer hover:border-black border border-white h-max bg-cover bg-center rounded-lg p-5 gap-5 flex items-center flex-col text-white shadow-lg'
+                            className='relative w-[520px] h-max bg-cover bg-center rounded-lg p-5 gap-5 flex items-center flex-col text-white shadow-lg'
                         >
                             <img
                                 className='w-full h-70 object-cover rounded-lg'
@@ -100,6 +111,22 @@ export default function Challenges() {
                                 <h2 className='text-2xl font-bold'>{challenge.challengeName}</h2>
                                 <p className='text-lg'>{challenge.gymName}</p>
                                 <p className='text-sm'>{challenge.challengeCategory}</p>
+                            </div>
+                            <div className='flex justify-between gap-2 w-full'>
+                                <button
+                                    type="button"
+                                    className="bg-green-500 text-white py-3 px-6 rounded-lg cursor-pointer"
+                                    onClick={() => handleEditClick(challenge._id)}
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    type="button"
+                                    className="bg-red-500 text-white py-3 px-6 rounded-lg cursor-pointer"
+                                    onClick={() => handleDeleteClick(challenge._id)}
+                                >
+                                    Delete
+                                </button>
                             </div>
                         </div>
                     ))}
