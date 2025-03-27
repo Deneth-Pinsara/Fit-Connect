@@ -57,6 +57,18 @@ const GymList = () => {
   return (
     <>
       <TopNav />
+      <div className='flex flex-row w-full h-screen'>
+      {/* Left Sidebar (Fixed) */}
+      <div className='flex flex-col w-1/5 h-full'>
+                <div className='w-full bg-gray-300 p-10'>
+                    <p className='text-3xl font-bold'>Gym List</p>
+                </div>
+                <div className='w-full bg-gray-400 p-10 space-y-4 flex-1'>
+                    <p className='text-2xl font-bold p-4 bg-gray-200 hover:bg-gray-300 cursor-pointer'
+                    onClick={() => navigate('/gym-list')}>Gym List</p>
+                    <p className='text-2xl font-bold p-4 bg-gray-200 hover:bg-gray-300 cursor-pointer'>Reviews</p>
+                </div>
+            </div>
       <div className="container mx-auto p-4">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold">Gym List</h2>
@@ -73,7 +85,7 @@ const GymList = () => {
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
-            <thead className="bg-gray-800 text-white">
+            <thead className="bg-gray-400 text-black">
               <tr>
                 <th className="py-3 px-6 text-left">Gym Name</th>
                 <th className="py-3 px-6 text-left">Location</th>
@@ -90,13 +102,13 @@ const GymList = () => {
                     <td className="py-3 px-6 text-center">{renderStars(gym.ratings)}</td>
                     <td className="py-3 px-6 text-center">
                       <div className="flex justify-center space-x-3">
-                        <button onClick={() => navigate(`/gym-view/${gym._id}`)} className="text-black hover:text-gray-700">
+                        <button onClick={() => navigate(`/gym-view/${gym._id}`)} className="text-black hover:text-gray-700 cursor-pointer">
                           <FaEye size={20} />
                         </button>
-                        <button onClick={() => navigate(`/gym-update/${gym._id}`)} className="text-black hover:text-gray-700">
+                        <button onClick={() => navigate(`/gym-update/${gym._id}`)} className="text-black hover:text-gray-700 cursor-pointer">
                           <FaPen size={20} />
                         </button>
-                        <button onClick={() => handleDelete(gym._id)} className="text-black hover:text-gray-700">
+                        <button onClick={() => handleDelete(gym._id)} className="text-black hover:text-gray-700 cursor-pointer">
                           <FaTrash size={20} />
                         </button>
                       </div>
@@ -112,9 +124,10 @@ const GymList = () => {
           </table>
         </div>
         <div className="flex flex-col items-center mt-4 space-y-2">
-          <button onClick={() => navigate('/gym-add-new')} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Add New Gym</button>
-          <button onClick={generatePDF} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Generate Gym List Report</button>
+          <button onClick={() => navigate('/gym-add-new')} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 cursor-pointer">Add New Gym</button>
+          <button onClick={generatePDF} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 cursor-pointer">Generate Gym List Report</button>
         </div>
+      </div>
       </div>
     </>
   );
