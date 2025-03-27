@@ -9,7 +9,7 @@ export default function GymAddNew() {
     location: "123 Main Street, Los Angeles, CA",
     phone: "07835665578",
     email: "contact@fitzone.com",
-    fees: "Rs5000",
+    fees: 5000,
     services: {
       strengthTraining: true,
       cardioMachines: true,
@@ -49,9 +49,10 @@ export default function GymAddNew() {
       data.append("phone", formData.phone);
       data.append("email", formData.email);
       data.append("fees", formData.fees);
-      Object.entries(formData.services).forEach(([key, value]) => {
-        data.append(key, value);
-      });
+      // Object.entries(formData.services).forEach(([key, value]) => {
+      //   data.append(key, value);
+      // });
+      data.append("services", JSON.stringify(formData.services));
       formData.photos.forEach((file, index) => {
         data.append(`photo${index + 1}`, file);
       });

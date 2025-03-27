@@ -13,6 +13,7 @@ const GymList = () => {
     const fetchGyms = async () => {
       try {
         const response = await AuthAxios.get('/api/gyms');
+        console.log(response.data);
         setGyms(response.data);
       } catch (error) {
         console.error('Error fetching gyms:', error);
