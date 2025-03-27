@@ -113,8 +113,12 @@ export default function GymAddNew() {
         </div>
       </div>
       <div className="flex flex-col-reverse justify-between mt-4 gap-3">
-        <button variant="secondary" className='bg-gray-200 p-2 text-black'>Cancel</button>
-        <button onClick={handleSubmit} className='bg-gray-500 p-2 text-white'>Save</button>
+        <button
+          variant="secondary"
+          className="bg-gray-200 p-2 text-black cursor-pointer hover:bg-gray-300 transition duration-200"> Cancel </button>
+        <button
+          onClick={handleSubmit}
+          className="bg-gray-500 p-2 text-white cursor-pointer hover:bg-gray-600 transition duration-200"> Save </button>
       </div>
     </div>
     </>
