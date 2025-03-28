@@ -1,7 +1,6 @@
 import React from 'react'
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Home from './pages/Home'
 import { AuthProvider } from './context/AuthContext'
 import Overview from './pages/Overview'
 import Community from './pages/Community'
@@ -27,6 +26,8 @@ import EditChallenges from './pages/challenge/EditChallenges'
 import ViewChallenge from './pages/challenge/ViewChallenge'
 import SuccessPage from './pages/common/SuccessPage'
 import AddReview from './pages/AddReview'
+import Register from './pages/Register'
+import Login from './pages/Login'
 
 
 
@@ -37,7 +38,8 @@ function App() {
       <BrowserRouter>
         <Routes>
 
-          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Overview />} />
           <Route path="/community" element={<Community />} />
           <Route path="/faq" element={<Faq />} />
