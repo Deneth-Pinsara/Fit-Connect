@@ -2,10 +2,7 @@ import React from 'react'
 import logo from '../assets/FitConnect.png'
 
 const navItems = [
-    {
-        name: "Home",
-        link: "/"
-    },
+    
     {
         name: "Challenges",
         link: "/challenges"
@@ -17,6 +14,10 @@ const navItems = [
     {
         name: "Q&A",
         link: "/faq"
+    },
+    {
+        name: "Logout",
+        link: "/login"
     }
 ]
 const TopNav = () => {
