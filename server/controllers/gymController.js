@@ -51,7 +51,16 @@ export const getGymById = async (req, res) => {
 // Update Gym
 export const updateGym = async (req, res) => {
   try {
-    const gym = await Gym.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const { location, services, fees, phone, email } = req.body;
+    const name = req.body.gymName;
+    // Extract filenames from req.files
+    const fileNames = Object.values(req.files).flat().map(file => file.filename);
+
+    const jsonServices = JSON.parse(services);
+
+    const servicesKeys = Object.keys(jsonServices);
+
+    const gym = await Gym.findByIdAndUpdate(req.params.id, { name, location, services: servicesKeys, fees, phone, email, images: fileNames.map(file => `/uploads/${file}`) }, { new: true });
     if (!gym) return res.status(404).json({ message: "Gym not found!" });
     res.status(200).json(gym);
   } catch (error) {
