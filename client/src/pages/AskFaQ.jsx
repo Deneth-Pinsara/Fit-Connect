@@ -50,8 +50,8 @@ const AskFaQ = () => {
             </div>
             {/* Submit cancel buttons */}
             <div className='flex items-center justify-center gap-5'>
-                <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={handleSubmit}>Submit</button>
-                <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 ml-10' onClick={()=>navigate("/commonfaq")}>Cancel</button>
+                <button className='bg-gray-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-600 transition-all cursor-pointer mt-10 mb-5' onClick={handleSubmit}>Submit</button>
+                <button className='bg-gray-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-600 transition-all cursor-pointer mt-10 mb-5' onClick={()=>navigate("/commonfaq")}>Cancel</button>
             </div>
         </div>
     )
