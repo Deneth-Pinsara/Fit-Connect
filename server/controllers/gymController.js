@@ -7,12 +7,9 @@ export const createGym = async (req, res) => {
     const name = req.body.gymName;
     // Extract filenames from req.files
     const fileNames = Object.values(req.files).flat().map(file => file.filename);
-
+    console.log(services)
     const jsonServices = JSON.parse(services);
-
-    const servicesKeys = Object.keys(jsonServices);
-
-    const gym = new Gym({ name, location, services: servicesKeys, fees, phone, email, images: fileNames.map(file => `/uploads/${file}`) });
+    const gym = new Gym({ name, location, services: jsonServices, fees, phone, email, images: fileNames.map(file => `/uploads/${file}`) });
     await gym.save();
     res.status(201).json(gym);
   } catch (error) {
@@ -53,17 +50,40 @@ export const updateGym = async (req, res) => {
   try {
     const { location, services, fees, phone, email } = req.body;
     const name = req.body.gymName;
-    // Extract filenames from req.files
-    const fileNames = Object.values(req.files).flat().map(file => file.filename);
+    
+    // Parse services if it's a string
+    const jsonServices = typeof services === 'string' ? JSON.parse(services) : services;
 
-    const jsonServices = JSON.parse(services);
+    // Handle file uploads - check if files exist first
+    let imageUrls = [];
+    if (req.files && req.files.photos) {
+      imageUrls = req.files.photos.map(file => `/uploads/${file.filename}`);
+    }
 
-    const servicesKeys = Object.keys(jsonServices);
+    const updateData = {
+      name, 
+      location, 
+      services: jsonServices, 
+      fees, 
+      phone, 
+      email
+    };
+    
+    // Only add images field if new images were uploaded
+    if (imageUrls.length > 0) {
+      updateData.images = imageUrls;
+    }
 
-    const gym = await Gym.findByIdAndUpdate(req.params.id, { name, location, services: servicesKeys, fees, phone, email, images: fileNames.map(file => `/uploads/${file}`) }, { new: true });
+    const gym = await Gym.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    );
+
     if (!gym) return res.status(404).json({ message: "Gym not found!" });
     res.status(200).json(gym);
   } catch (error) {
+    console.error("Update error:", error);
     res.status(500).json({ message: error.message });
   }
 };
