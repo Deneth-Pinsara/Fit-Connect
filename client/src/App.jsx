@@ -28,6 +28,7 @@ import SuccessPage from './pages/common/SuccessPage'
 import AddReview from './pages/AddReview'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import AnswerFaq from './pages/AnswerFaq'
 
 
 
@@ -48,13 +49,14 @@ function App() {
           <Route path="/myfaq" element={<MyFaq />} />
           <Route path="/thank" element={<ThankYou />} />
           <Route path="/faq/:id" element={<SingleFaq />} />
+          <Route path='/answer/:id' element={<AnswerFaq />} />
 
 
           <Route path="/gym-list" element={<GymList />} />
           <Route path="/gym-add-new" element={<GymAddNew />} />
           <Route path="/gym-view/:id" element={<GymView />} />
           <Route path="/gym-update/:id" element={<GymUpdate />} />
-          
+
           <Route path="/review-add" element={<AddReview />} />
 
 

@@ -45,7 +45,7 @@ export default function Challenges() {
                     <p className='text-2xl font-bold'>Challenge Listing</p>
                 </div>
                 <div className='w-full bg-gray-500 p-10 space-y-4 flex-1'>
-                    <p className='text-2xl font-bold p-4 bg-white'>Gym List</p>
+                    <p className='text-2xl font-bold p-4 bg-white cursor-pointer' onClick={() => navigate('/gym-list')}>Gym List</p>
                     <p 
                         className='text-2xl font-bold p-4 bg-white cursor-pointer'
                         onClick={() => navigate('/create-challenge')}

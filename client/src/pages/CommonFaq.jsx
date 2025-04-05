@@ -56,7 +56,7 @@ const CommonFaq = () => {
                         <p className="text-gray-700 mt-2">A: {faq.description}</p>
                         <button 
                             className="bg-green-500 text-white px-4 py-2 rounded-xl shadow-md hover:bg-green-600 transition duration-300 absolute right-5 top-5"
-                            onClick={() => navigate(`/faq/${faq._id}?answer=true`)}
+                            onClick={() => navigate(`/answer/${faq._id}`)}
                         >
                             Answer
                         </button>

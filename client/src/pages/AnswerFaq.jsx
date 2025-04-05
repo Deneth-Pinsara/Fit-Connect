@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import TopNav from '../components/TopNav';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthAxios from '../utils/AuthAxios';
+import toast from 'react-simple-toasts';
 
-const SingleFaq = () => {
+const AnswerFaq = () => {
     const navigate = useNavigate();
     const params = useParams();
-    const searchParams = new URLSearchParams(window.location.search);
-    const isAnswer = searchParams.get("answer");
+    const isAnswer = true
     const [isEditing, setIsEditing] = useState(false);
     const [refresh, setRefresh] = useState(false);
     const [q, setQ] = useState({
@@ -22,22 +22,16 @@ const SingleFaq = () => {
         });
     };
 
-    const handleDelete = async () => {
-        try {
-            const rep = await AuthAxios.delete(`/discussion/${q._id}`);
-            console.log(rep);
-            alert("Question Deleted Successfully");
-            navigate("/myfaq");
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
     const handleSave = async () => {
         try {
             if (!isEditing && !isAnswer) {
                 setIsEditing(true);
                 return;
+            }
+
+            if(!q.description){
+                toast("Please enter answer");
+                return
             }
             const rep = await AuthAxios.patch(`/discussion/${q._id}`, {
                 title: q?.title,
@@ -46,7 +40,7 @@ const SingleFaq = () => {
             console.log(rep);
             setIsEditing(false);
             setRefresh(!refresh);
-            alert("Question Updated Successfully");
+            toast("Question Updated Successfully");
         } catch (error) {
             console.log(error);
             setIsEditing(false);
@@ -76,18 +70,17 @@ const SingleFaq = () => {
 
                 <div className="w-full md:w-3/4 mx-auto px-4 py-8 bg-white shadow-lg rounded-lg mt-10">
                     <h5 className="text-lg font-semibold mb-4">Submitted Question:</h5>
-                    <input disabled={!isEditing} name='title' className='text-xl bg-gray-200 p-3 font-semibold w-full rounded-lg' onChange={handleChange} value={q?.title}></input>
+                    <input disabled={true} name='title' className='text-xl bg-gray-200 p-3 font-semibold w-full rounded-lg' onChange={handleChange} value={q?.title}></input>
                     <h5 className='text-lg font-semibold mt-5'>Answer:</h5>
-                    <input disabled={isAnswer ? false : !isEditing} name='description' className='text-lg font-semibold mt-3 bg-gray-200 p-3 w-full rounded-lg' onChange={handleChange} value={q?.description}></input>
+                    <input name='description' className='text-lg font-semibold mt-3 bg-gray-200 p-3 w-full rounded-lg' onChange={handleChange} value={q?.description}></input>
                 </div>
 
                 <div className="flex justify-center gap-4 mt-10">
-                    <button className='bg-gray-500 text-white px-6 py-3 rounded-2xl font-semibold hover:bg-gray-600 transition-all' onClick={handleSave}>{(isEditing || isAnswer) ? "Save" : "Edit"}</button>
-                    <button className='bg-red-500 text-white px-6 py-3 rounded-2xl font-semibold hover:bg-red-600 transition-all' onClick={handleDelete}>Delete</button>
+                    <button className='bg-gray-500 text-white px-6 py-3 rounded-2xl font-semibold hover:bg-gray-600 transition-all' onClick={handleSave}>Submit Answer</button>
                 </div>
             </div>
         </div>
     );
 };
 
-export default SingleFaq;
+export default AnswerFaq;

@@ -2,8 +2,10 @@ import React from 'react'
 import TopNav from '../components/TopNav'
 import imageB from '../assets/image6.png'
 import tick from '../assets/greentick.jpg'
+import { useNavigate } from 'react-router-dom'
 
 const ThankYou = () => {
+    const navigate = useNavigate()
     return (
         <div>
             <TopNav />
@@ -16,6 +18,7 @@ const ThankYou = () => {
 
                     <h2>Thank You</h2>
                     <p>Your question has been added successfully</p>
+                    <button className='bg-gray-200 px-4 py-3 rounded-2xl mt-10 cursor-pointer' onClick={() => navigate(-1)}>Go Back</button>
                 </div>
             </div>
         </div>
