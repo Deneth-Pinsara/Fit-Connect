@@ -29,6 +29,7 @@ import AddReview from './pages/AddReview'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import AnswerFaq from './pages/AnswerFaq'
+import AdminReview from './pages/AdminReview'
 
 
 
@@ -41,7 +42,6 @@ function App() {
 
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/dashboard" element={<Overview />} />
           <Route path="/community" element={<Community />} />
           <Route path="/faq" element={<Faq />} />
           <Route path="/commonfaq" element={<CommonFaq />} />
@@ -70,6 +70,9 @@ function App() {
 
 
           <Route path="/success-page" element={<SuccessPage />} />
+
+          {/* Admin routes */}
+          <Route path="/dashboard" element={<AdminReview />} />
 
         </Routes>
       </BrowserRouter>

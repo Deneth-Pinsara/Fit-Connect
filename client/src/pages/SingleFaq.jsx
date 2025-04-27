@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import TopNav from '../components/TopNav';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthAxios from '../utils/AuthAxios';
+import BackButton from './common/BackButton';
+import toast from 'react-simple-toasts';
 
 const SingleFaq = () => {
     const navigate = useNavigate();
@@ -26,7 +28,7 @@ const SingleFaq = () => {
         try {
             const rep = await AuthAxios.delete(`/discussion/${q._id}`);
             console.log(rep);
-            alert("Question Deleted Successfully");
+            toast("Question Deleted Successfully");
             navigate("/myfaq");
         } catch (error) {
             console.log(error);
@@ -46,7 +48,7 @@ const SingleFaq = () => {
             console.log(rep);
             setIsEditing(false);
             setRefresh(!refresh);
-            alert("Question Updated Successfully");
+            toast("Question Updated Successfully");
         } catch (error) {
             console.log(error);
             setIsEditing(false);
@@ -72,6 +74,7 @@ const SingleFaq = () => {
             <TopNav />
 
             <div className="max-w-4xl mx-auto p-6">
+                <BackButton className={'mr-5'}/>
                 <button className="bg-gray-500 text-white px-6 py-3 rounded-2xl mt-6 w-full md:w-auto text-center font-semibold">View Question</button>
 
                 <div className="w-full md:w-3/4 mx-auto px-4 py-8 bg-white shadow-lg rounded-lg mt-10">

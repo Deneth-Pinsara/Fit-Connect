@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import AuthAxios from '../../utils/AuthAxios';
 import { useNavigate, useParams } from 'react-router-dom';
+import toast from 'react-simple-toasts';
 
 const ViewChallenge = () => {
     const { id } = useParams();
@@ -78,7 +79,7 @@ const ViewChallenge = () => {
                 })
                 .catch(error => {
                     console.error('Error fetching challenge data:', error);
-                    alert('Error fetching challenge data');
+                    toast('Error fetching challenge data');
                 });
         }
     }, [id]);

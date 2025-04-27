@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AuthAxios from '../../utils/AuthAxios';
 import { useNavigate, useParams } from 'react-router-dom';
+import toast from 'react-simple-toasts';
 
 const EditChallenge = () => {
     const navigate = useNavigate();
@@ -54,7 +55,7 @@ const EditChallenge = () => {
                 })
                 .catch(error => {
                     console.error('Error fetching challenge data:', error);
-                    alert('Error fetching challenge data');
+                    toast('Error fetching challenge data');
                 });
         }
     }, [id]);
@@ -196,7 +197,7 @@ const EditChallenge = () => {
             navigate('/success');
         } catch (error) {
             console.error('Error creating/updating challenge:', error);
-            alert(`Error saving challenge: ${error.response?.data?.message || error.message}`);
+            toast(`Error saving challenge: ${error.response?.data?.message || error.message}`);
         }
     };
 

@@ -64,7 +64,7 @@ export default function Challenges() {
                     >
                         Challenge Category
                     </p>
-                    <p className='text-2xl font-bold p-4 bg-white'>Reviews</p>
+                    <p onClick={() => navigate('/review-add')} className='text-2xl cursor-pointer font-bold p-4 bg-white'>Reviews</p>
                 </div>
             </div>
 

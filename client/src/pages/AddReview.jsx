@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import AuthAxios from "../utils/AuthAxios";
 import { FaStar } from "react-icons/fa";
 import TopNav from '../components/TopNav';
+import toast from "react-simple-toasts";
+import { useAuth } from "../context/AuthContext";
 
 const AddReview = () => {
   const { gymId } = useParams(); // to get gym id from the URL if needed
@@ -18,6 +20,8 @@ const AddReview = () => {
   const [isUpdating, setIsUpdating] = useState(false); // New state to check if we're updating a review
   const [reviewToUpdate, setReviewToUpdate] = useState(null); // Store the review to be updated
   const navigate = useNavigate(); // Initialize navigate
+  const context = useAuth()
+  console.log(context.user)
 
   useEffect(() => {
     const fetchGyms = async () => {
@@ -44,19 +48,20 @@ const AddReview = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!userName || !comment || rating < 1 || !selectedGymId) {
-      alert("Please fill out all fields");
+    if (!userName || !comment || rating < 1 || (!selectedGymId && !reviewToUpdate)) {
+      toast("Please fill in all the required fields.");
       return;
     }
 
     try {
       if (isUpdating && reviewToUpdate) {
         // Update review
+        console.log(reviewToUpdate, rating, comment);
         await AuthAxios.put(`/api/reviews/${reviewToUpdate._id}`, {
           rating,
           comment,
         });
-        alert("Review updated successfully!");
+        toast("Review updated successfully!");
       } else {
         // Create new review
         await AuthAxios.post("/api/reviews/create", {
@@ -65,7 +70,7 @@ const AddReview = () => {
           comment,
           gymId: selectedGymId, // Use the selected gym ID
         });
-        alert("Review added successfully!");
+        toast("Review added successfully!");
       }
 
       setShowDialog(false);
@@ -74,19 +79,19 @@ const AddReview = () => {
       setReviewToUpdate(null); // Reset review to update
     } catch (error) {
       console.error("Error adding/updating review:", error);
-      alert("Failed to add/update review");
+      toast("Failed to add/update review");
     }
   };
 
   const handleDelete = async (reviewId) => {
     try {
       await AuthAxios.delete(`/api/reviews/${reviewId}`);
-      alert("Review deleted successfully!");
+      toast("Review deleted successfully!");
       fetchReviews(selectedGymId); // Refresh reviews after deleting
       navigate('/review-add'); // Redirect to /review-add page after deletion
     } catch (error) {
       console.error("Error deleting review:", error);
-      alert("Failed to delete review");
+      toast("Failed to delete review");
     }
   };
 
@@ -96,6 +101,7 @@ const AddReview = () => {
     setUserName(review.user);
     setRating(review.rating);
     setComment(review.comment);
+    setViewReviewsDialog(false);
     setShowDialog(true); // Show the review form for updating
   };
 
@@ -103,9 +109,8 @@ const AddReview = () => {
     return Array.from({ length: 5 }, (_, i) => (
       <span
         key={i}
-        className={`cursor-pointer text-xl ${
-          i < currentRating ? "text-yellow-500" : "text-gray-300"
-        }`}
+        className={`cursor-pointer text-xl ${i < currentRating ? "text-yellow-500" : "text-gray-300"
+          }`}
         onClick={() => setRating(i + 1)}
       >
         <FaStar />
@@ -131,7 +136,7 @@ const AddReview = () => {
             </p>
             <p
               className="text-2xl font-bold p-4 bg-gray-200 hover:bg-gray-300 cursor-pointer"
-              onClick={() => navigate('/review-add')}
+              onClick={() => navigate(context.user.role === 'admin' ? '/dashboard' : '/review-add')}
             >
               Reviews
             </p>
@@ -162,7 +167,7 @@ const AddReview = () => {
                     </button>
                   </div>
                 </div>
-                {showDialog && selectedGymId === gym._id && (
+                {showDialog && (
                   <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                       <h3 className="text-xl font-bold mb-4">
@@ -241,21 +246,22 @@ const AddReview = () => {
                         <div className="flex justify-between items-center">
                           <span className="font-semibold">{review.user}</span>
                           <div className="flex space-x-1">{renderStars(review.rating)}</div>
+                          <span className="text-gray-500">{review.userId}</span>
                         </div>
                         <p className="mt-2">{review.comment}</p>
                         <div className="flex justify-between mt-2">
-                          <button
+                          {(review?.userId === context?.user?._id || context?.user?.role === "admin") && <button
                             onClick={() => handleDelete(review._id)} // Add delete functionality
-                            className="text-red-500 hover:text-red-600"
+                            className="text-red-500 hover:text-red-600 cursor-pointer"
                           >
                             Delete
-                          </button>
-                          <button
+                          </button>}
+                          {(review?.userId === context?.user?._id || context?.user?.role === "admin") && <button
                             onClick={() => handleUpdate(review)} // Add update functionality
-                            className="text-blue-500 hover:text-blue-600"
+                            className="text-blue-500 hover:text-blue-600 cursor-pointer"
                           >
                             Update
-                          </button>
+                          </button>}
                         </div>
                       </div>
                     ))

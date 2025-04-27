@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AuthAxios from '../../utils/AuthAxios';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-simple-toasts';
 
 const CreateChallenge = () => {
     const navigate = useNavigate();
@@ -121,7 +122,7 @@ const CreateChallenge = () => {
             });
 
             console.log('Challenge created:', response.data);
-            alert('Challenge created successfully!');
+            toast('Challenge created successfully!');
             navigate('/success');
             setChallengeData(
                 {
@@ -149,7 +150,7 @@ const CreateChallenge = () => {
             console.error('Error Status:', error.response?.status);
             console.error('Error Headers:', error.response?.headers);
 
-            alert(`Error creating challenge: ${error.response?.data?.message || error.message}`);
+            toast(`Error creating challenge: ${error.response?.data?.message || error.message}`);
         }
     };
 
