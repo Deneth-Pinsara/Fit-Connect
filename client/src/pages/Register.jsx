@@ -3,6 +3,7 @@ import AuthAxios from "../utils/AuthAxios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-simple-toasts";
 import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -77,6 +78,7 @@ const Register = () => {
           </p>
         </div>
       </div>
+      <Footer/>
     </>
   );
 };

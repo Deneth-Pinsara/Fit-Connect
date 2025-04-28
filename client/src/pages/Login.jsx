@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-simple-toasts";
 import TopNav from "../components/TopNav";
 import { useAuth } from "../context/AuthContext";
+import Footer from "../components/Footer";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -68,6 +69,7 @@ const Login = () => {
           </p>
         </div>
       </div>
+      <Footer/>
     </>
   );
 };

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import AuthAxios from '../../utils/AuthAxios';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-simple-toasts';
+import TopNav from '../../components/TopNav';
+import Footer from '../../components/Footer';
 
 const CreateChallenge = () => {
     const navigate = useNavigate();
@@ -357,17 +359,21 @@ const CreateChallenge = () => {
 
 
     return (
-        <div className="max-w-max mx-auto p-10 bg-white flex flex-col gap-5">
-            <div>
-                <p className='text-3xl font-bold text-center'> ADD CHALLENGE</p>
-                <div className='p-10 rounded-2xl bg-gray-500 mt-5 w-max'>
-                    <form>
-                        {step === 1 && renderStep1()}
-                        {step === 2 && renderStep2()}
-                    </form>
+        <>
+            <TopNav />
+            <div className="max-w-max mx-auto p-10 bg-white flex flex-col gap-5">
+                <div>
+                    <p className='text-3xl font-bold text-center'> ADD CHALLENGE</p>
+                    <div className='p-10 rounded-2xl bg-gray-500 mt-5 w-max'>
+                        <form>
+                            {step === 1 && renderStep1()}
+                            {step === 2 && renderStep2()}
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+            <Footer />
+        </>
     );
 };
 

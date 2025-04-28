@@ -5,6 +5,7 @@ import { FaStar } from "react-icons/fa";
 import TopNav from '../components/TopNav';
 import toast from "react-simple-toasts";
 import { useAuth } from "../context/AuthContext";
+import Footer from "../components/Footer";
 
 const AddReview = () => {
   const { gymId } = useParams(); // to get gym id from the URL if needed
@@ -168,7 +169,7 @@ const AddReview = () => {
                   </div>
                 </div>
                 {showDialog && (
-                  <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
+                  <div className="fixed inset-0 bg-gray-500/50 bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                       <h3 className="text-xl font-bold mb-4">
                         {isUpdating ? "Update Your Review" : "Write Your Review"}
@@ -230,7 +231,7 @@ const AddReview = () => {
 
           {/* Show reviews section */}
           {viewReviewsDialog && (
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
+            <div className="fixed inset-0 bg-gray-500/50 bg-opacity-50 flex items-center justify-center">
               <div className="bg-white p-6 rounded-lg shadow-lg w-96">
                 <h3 className="text-xl font-bold mb-4">Reviews</h3>
                 <button
@@ -246,7 +247,6 @@ const AddReview = () => {
                         <div className="flex justify-between items-center">
                           <span className="font-semibold">{review.user}</span>
                           <div className="flex space-x-1">{renderStars(review.rating)}</div>
-                          <span className="text-gray-500">{review.userId}</span>
                         </div>
                         <p className="mt-2">{review.comment}</p>
                         <div className="flex justify-between mt-2">
@@ -274,6 +274,7 @@ const AddReview = () => {
           )}
         </div>
       </div>
+      <Footer/>
     </>
   );
 };

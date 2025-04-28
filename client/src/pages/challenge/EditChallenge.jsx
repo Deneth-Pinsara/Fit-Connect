@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import AuthAxios from '../../utils/AuthAxios';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-simple-toasts';
+import Footer from '../../components/Footer';
+import TopNav from '../../components/TopNav';
 
 const EditChallenge = () => {
     const navigate = useNavigate();
@@ -136,8 +138,8 @@ const EditChallenge = () => {
         try {
             // Explicitly handle each field
             const fieldsToAppend = [
-                'gymName', 'challengeName', 'challengeCategory', 
-                'challengeTimePeriod', 'focusBodyParts', 'fitnessBenefits', 
+                'gymName', 'challengeName', 'challengeCategory',
+                'challengeTimePeriod', 'focusBodyParts', 'fitnessBenefits',
                 'explanation', 'focus', 'type'
             ];
 
@@ -158,10 +160,10 @@ const EditChallenge = () => {
 
             // Handle workout steps
             if (challengeData.workoutSteps && challengeData.workoutSteps.length > 0) {
-                const filteredWorkoutSteps = challengeData.workoutSteps.filter(step => 
+                const filteredWorkoutSteps = challengeData.workoutSteps.filter(step =>
                     step.stepName || step.stepCount || step.time || step.sets
                 );
-                
+
                 if (filteredWorkoutSteps.length > 0) {
                     formData.append('workoutSteps', JSON.stringify(filteredWorkoutSteps));
                 }
@@ -380,25 +382,30 @@ const EditChallenge = () => {
     );
 
     return (
-        <div div className='flex flex-col items-center gap-5 py-10'>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-8 items-center">
-                <h1 className="text-2xl font-bold">Create or Edit Challenge</h1>
-                {step === 1 ? renderStep1() : renderStep2()}
-                <button
-                    type="submit"
-                    className="bg-green-500 text-white py-3 px-6 rounded-lg cursor-pointer mx-auto"
-                >
-                    Save Challenge
-                </button>
-            </form>
+        <>
+            <TopNav />
+            <div div className='flex flex-col items-center gap-5 py-10'>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-8 items-center">
+                    <h1 className="text-2xl font-bold">Create or Edit Challenge</h1>
+                    {step === 1 ? renderStep1() : renderStep2()}
+                    <button
+                        type="submit"
+                        className="bg-green-500 text-white py-3 px-6 rounded-lg cursor-pointer mx-auto"
+                    >
+                        Save Challenge
+                    </button>
+                </form>
 
-            <button
-                onClick={() => navigate('/challenges')}
-                className="bg-red-500 text-white py-3 px-6 rounded-lg cursor-pointer mx-auto"
-            >
-                Cancel
-            </button>
-        </div>
+                <button
+                    onClick={() => navigate('/challenges')}
+                    className="bg-red-500 text-white py-3 px-6 rounded-lg cursor-pointer mx-auto"
+                >
+                    Cancel
+                </button>
+            </div>
+            <Footer />
+
+        </>
     );
 };
 
